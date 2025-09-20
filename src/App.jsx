@@ -18,6 +18,7 @@ import { KYCPage } from './components/KYCPage';
 import { BlogPage } from './components/BlogPage';
 import { HelpCenterPage } from './components/HelpCenterPage';
 import { BuyVehiclesPage } from './components/BuyVehiclesPage';
+import { RentPage } from './components/RentPage';
 import { Navigation } from './components/Navigation';
 import whatsappIcon from './assets/whatsapp.svg';
 
@@ -103,6 +104,8 @@ function App() {
                 return <HelpCenterPage onNavigate={setCurrentPage} user={currentUser} />;
             case 'buy-vehicles':
                 return <BuyVehiclesPage onNavigate={setCurrentPage} user={currentUser} />;
+            case 'rent':
+                return <RentPage onNavigate={setCurrentPage} />;
             default:
                 return <HomePage onNavigate={setCurrentPage} user={currentUser} />;
         }

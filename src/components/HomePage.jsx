@@ -83,26 +83,30 @@ export function HomePage({ onNavigate, user }) {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-              <Button size="lg" className="bg-lime-400 hover:bg-lime-500 text-black px-12 py-6 text-xl font-bold rounded-full shadow-lg transform hover:scale-105 transition-all" onClick={() => user ? onNavigate('dashboard') : onNavigate('auth')}>
+              {/* Primary lime pill CTA */}
+              <Button size="lg" className="bg-lime-400 hover:bg-lime-500 text-black px-12 py-6 text-xl font-bold rounded-full shadow-lg transform hover:scale-105 transition-all flex items-center justify-center min-w-[260px]" onClick={() => user ? onNavigate('dashboard') : onNavigate('auth')}>
                 {user ? 'Go to Dashboard' : 'Start Your Journey'}
                 <ArrowRight className="ml-3 h-6 w-6"/>
               </Button>
-              
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black px-12 py-6 text-xl rounded-full" onClick={() => onNavigate('vehicles')}>
+
+              {/* See How It Works - visible beside primary CTA on md+ screens */}
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black px-10 py-4 text-lg rounded-full hidden md:inline-flex ml-6" onClick={() => onNavigate('vehicles')}>
                 <Play className="mr-3 h-6 w-6"/>
                 See How It Works
               </Button>
             </div>
 
             {/* Take on Rent and Buy Vehicle Options */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <Button size="lg" variant="outline" className="border-lime-400 text-lime-400 hover:bg-lime-400 hover:text-black px-10 py-4 text-lg rounded-full bg-black/20 backdrop-blur-sm" onClick={() => onNavigate('pricing')}>
-                Take on Rent
-              </Button>
-              
-              <Button size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-black px-10 py-4 text-lg rounded-full bg-black/20 backdrop-blur-sm" onClick={() => onNavigate('buy-vehicles')}>
-                Buy Vehicle
-              </Button>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="flex flex-row gap-6 justify-center items-center mb-12 flex-wrap">
+              <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} onClick={() => onNavigate('vehicles')} aria-label="Take on Rent" className="relative px-6 py-3 rounded-full border-2 border-lime-400 text-lime-400 bg-transparent hover:bg-lime-400 hover:text-black transition-all shadow-inner text-lg overflow-hidden">
+                <span className="relative z-10">Take on Rent</span>
+                <span aria-hidden className="absolute inset-0 rounded-full ring-0 hover:ring-4 hover:ring-lime-300 transition-all pointer-events-none"></span>
+              </motion.button>
+
+              <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} onClick={() => onNavigate('buy-vehicles')} aria-label="Buy Vehicle" className="relative px-6 py-3 rounded-full border-2 border-lime-400 text-blue-400 bg-transparent hover:bg-lime-400 hover:text-black transition-all shadow-inner text-lg overflow-hidden">
+                <span className="relative z-10">Buy Vehicle</span>
+                <span aria-hidden className="absolute inset-0 rounded-full ring-0 hover:ring-4 hover:ring-lime-300 transition-all pointer-events-none"></span>
+              </motion.button>
             </motion.div>
 
             {/* Driver Earning Potential */}
@@ -366,6 +370,11 @@ export function HomePage({ onNavigate, user }) {
           </motion.div>
         </div>
       </section>
+
+      {/* Floating WhatsApp quick action */}
+      <a href="https://wa.me/?text=I%27m%20interested%20in%20Go%20Ride%20Pe" target="_blank" rel="noreferrer" className="fixed right-6 bottom-6 z-50 w-14 h-14 bg-gradient-to-br from-lime-400 to-green-500 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transform transition-all">
+        <img src={new URL('../assets/whatsapp.svg', import.meta.url).href} alt="WhatsApp" className="w-8 h-8"/>
+      </a>
 
       <Footer onNavigate={onNavigate}/>
     </div>);

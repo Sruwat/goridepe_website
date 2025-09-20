@@ -45,12 +45,15 @@ function VehicleCarousel({ vehicleId }) {
           cands.push(`/png/trike/trik.jpg`);
         } else {
           for (const name of baseNames) {
-            // runtime-accessible URLs (try repo-root /png/, then src assets)
-            cands.push(`/png/${name}/${n}.png`);
-            cands.push(`/png/${name.replace(/ /g, '-')}/${n}.png`);
-            cands.push(`/png/${name.toLowerCase()}/${n}.png`);
-            cands.push(`/assets/png/${name}/${n}.png`);
-            cands.push(`/assets/png/png/${name}/${n}.png`);
+            // Prefer bundler-resolved assets under src/assets/<vehicleName>/ to ensure they are included in build
+            try {
+              cands.push(new URL(`../assets/${name}/${n}.png`, import.meta.url).href);
+            } catch (e) {
+              // fallback to runtime paths
+              cands.push(`/png/${name}/${n}.png`);
+              cands.push(`/png/${name.replace(/ /g, '-')}/${n}.png`);
+              cands.push(`/png/${name.toLowerCase()}/${n}.png`);
+            }
           }
         }
         // finally try the placeholder
@@ -96,12 +99,14 @@ function CardImage({ vehicleId }) {
     if (vehicleId === 'trike') {
       candidates.push(`/png/trike/trik.jpg`);
     } else {
-      for (const name of baseNames) {
+    for (const name of baseNames) {
+      try {
+        candidates.push(new URL(`../assets/${name}/1.png`, import.meta.url).href);
+      } catch (e) {
         candidates.push(`/png/${name}/1.png`);
         candidates.push(`/png/${name.replace(/ /g, '-')}/1.png`);
-        candidates.push(`/assets/png/${name}/1.png`);
-        candidates.push(`/assets/png/png/${name}/1.png`);
       }
+    }
     }
     candidates.push(new URL('../assets/0e8156ef0eda994e60ba2744c68fa19ab070cdc9.png', import.meta.url).href);
 
@@ -119,7 +124,7 @@ function CardImage({ vehicleId }) {
 
   // make card images smaller to match updated designs
   return (<div className="w-full h-28 md:h-32 lg:h-36 bg-gray-100 flex items-center justify-center overflow-hidden rounded-lg">
-    {src ? (<img src={src} alt={vehicleId} className="object-contain" style={{maxWidth: '35%', maxHeight: '70%'}}/>) : (<div className="w-full h-full bg-gray-200"/> ) }
+    {src ? (<img src={src} alt={vehicleId} className="object-contain max-w-[60%] md:max-w-[45%] lg:max-w-[35%] max-h-[80%]"/>) : (<div className="w-full h-full bg-gray-200"/> ) }
   </div>);
 }
 
@@ -207,7 +212,8 @@ function VehicleGallery({ vehicleId }) {
 }
 export function BuyVehiclesPage({ onNavigate, user }) {
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [selectedVehicleId, setSelectedVehicleId] = useState(null);
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showDetailPage, setShowDetailPage] = useState(false);
     const [bookingData, setBookingData] = useState({
@@ -463,6 +469,7 @@ export function BuyVehiclesPage({ onNavigate, user }) {
         : vehicles.filter(vehicle => vehicle.category === selectedCategory);
   const handleBookVehicle = (vehicle) => {
     setSelectedVehicle(vehicle);
+    setSelectedVehicleId(vehicle.id);
     // open full-page detail + booking form (right side)
     setShowDetailPage(true);
   };
@@ -608,7 +615,7 @@ export function BuyVehiclesPage({ onNavigate, user }) {
                   <div className="absolute left-6 top-8 text-5xl font-extrabold text-green-200 select-none">GO RIDE PE</div>
                   <div className="absolute left-6 top-20 text-2xl font-bold text-blue-600">+ KWICK</div>
                   <div className="w-full px-2">
-                    <VehicleGallery vehicleId={selectedVehicle.id} />
+                    <VehicleGallery vehicleId={selectedVehicleId || selectedVehicle?.id} />
                   </div>
                 </div>
 

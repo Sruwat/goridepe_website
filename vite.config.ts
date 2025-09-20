@@ -65,5 +65,9 @@
     server: {
       port: 3000,
       open: true,
+      hmr: {
+        // Disable the Vite client overlay/toast in development
+        overlay: false,
+      },
     },
   });
