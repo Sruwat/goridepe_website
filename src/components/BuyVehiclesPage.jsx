@@ -9,6 +9,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Footer } from './Footer';
 import { Zap, Battery, Gauge, Shield, Users, ArrowRight, CheckCircle, Bike, Award, Truck } from 'lucide-react';
 
+// Bundle all images under src/assets so we can reliably resolve them in production builds
+// Vite returns modules whose default export is the hashed URL string.
+// import.meta.globEager is not available in some bundlers/runtimes; use the standard
+// import.meta.glob with the eager option which is supported by Vite.
+const ASSET_IMAGES = import.meta.glob('../assets/**', { eager: true });
+
+function findBundledImageFor(name, n = 1) {
+  const tryNames = [
+    `${name}`,
+    `${name.replace(/ /g, '-')}`,
+    `${name.toLowerCase()}`
+  ];
+  for (const t of tryNames) {
+    const pngKey = `../assets/${t}/${n}.png`;
+    const jpgKey = `../assets/${t}/${n}.jpg`;
+    if (ASSET_IMAGES[pngKey] && ASSET_IMAGES[pngKey].default) return ASSET_IMAGES[pngKey].default;
+    if (ASSET_IMAGES[jpgKey] && ASSET_IMAGES[jpgKey].default) return ASSET_IMAGES[jpgKey].default;
+  }
+  return null;
+}
+
 // Simple carousel component for vehicle images
 function VehicleCarousel({ vehicleId }) {
   const [index, setIndex] = useState(0);
@@ -41,20 +62,17 @@ function VehicleCarousel({ vehicleId }) {
       for (let n = 1; n <= imageCount; n++) {
         const cands = [];
         // For trike, only attempt the known trik.jpg to keep showcase strict
-        if (vehicleId === 'trike') {
-          cands.push(`/png/trike/trik.jpg`);
-        } else {
-          for (const name of baseNames) {
-            // Prefer bundler-resolved assets under src/assets/<vehicleName>/ to ensure they are included in build
-            try {
-              cands.push(new URL(`../assets/${name}/${n}.png`, import.meta.url).href);
-            } catch (e) {
-              // fallback to runtime paths
-              cands.push(`/png/${name}/${n}.png`);
-              cands.push(`/png/${name.replace(/ /g, '-')}/${n}.png`);
-              cands.push(`/png/${name.toLowerCase()}/${n}.png`);
-            }
+        // Prefer bundler-resolved assets under src/assets/<vehicleName>/ to ensure they are included in build
+        for (const name of baseNames) {
+          const bundled = findBundledImageFor(name, n);
+          if (bundled) {
+            cands.push(bundled);
+            continue;
           }
+          // fallback to runtime paths (public/png should exist after deploy)
+          cands.push(`/png/${name}/${n}.png`);
+          cands.push(`/png/${name.replace(/ /g, '-')}/${n}.png`);
+          cands.push(`/png/${name.toLowerCase()}/${n}.png`);
         }
         // finally try the placeholder
         cands.push(new URL('../assets/0e8156ef0eda994e60ba2744c68fa19ab070cdc9.png', import.meta.url).href);
@@ -95,18 +113,14 @@ function CardImage({ vehicleId }) {
     }
 
     const candidates = [];
-    // For trike, strictly use trik.jpg so the showcase only shows the trike image
-    if (vehicleId === 'trike') {
-      candidates.push(`/png/trike/trik.jpg`);
-    } else {
     for (const name of baseNames) {
-      try {
-        candidates.push(new URL(`../assets/${name}/1.png`, import.meta.url).href);
-      } catch (e) {
-        candidates.push(`/png/${name}/1.png`);
-        candidates.push(`/png/${name.replace(/ /g, '-')}/1.png`);
+      const bundled = findBundledImageFor(name, 1);
+      if (bundled) {
+        candidates.push(bundled);
+        continue;
       }
-    }
+      candidates.push(`/png/${name}/1.png`);
+      candidates.push(`/png/${name.replace(/ /g, '-')}/1.png`);
     }
     candidates.push(new URL('../assets/0e8156ef0eda994e60ba2744c68fa19ab070cdc9.png', import.meta.url).href);
 
@@ -158,17 +172,17 @@ function VehicleGallery({ vehicleId }) {
       const results = [];
       for (let n = 1; n <= count; n++) {
         const cands = [];
-        // trike: use only the trik.jpg as the strict showcase
-        if (vehicleId === 'trike') {
-          cands.push(`/png/trike/trik.jpg`);
-        } else {
-          for (const name of baseNames) {
-            cands.push(`/png/${name}/${n}.png`);
-            cands.push(`/png/${name.replace(/ /g, '-')}/${n}.png`);
-            cands.push(`/png/${name.toLowerCase()}/${n}.png`);
-            cands.push(`/assets/png/${name}/${n}.png`);
-            cands.push(`/assets/png/png/${name}/${n}.png`);
+        for (const name of baseNames) {
+          const bundled = findBundledImageFor(name, n);
+          if (bundled) {
+            cands.push(bundled);
+            continue;
           }
+          cands.push(`/png/${name}/${n}.png`);
+          cands.push(`/png/${name.replace(/ /g, '-')}/${n}.png`);
+          cands.push(`/png/${name.toLowerCase()}/${n}.png`);
+          cands.push(`/assets/png/${name}/${n}.png`);
+          cands.push(`/assets/png/png/${name}/${n}.png`);
         }
         // placeholder at the end
         cands.push(new URL('../assets/0e8156ef0eda994e60ba2744c68fa19ab070cdc9.png', import.meta.url).href);
@@ -235,12 +249,12 @@ export function BuyVehiclesPage({ onNavigate, user }) {
   const [selectedStateObj, setSelectedStateObj] = useState(demoStates[0]);
     const vehicles = [
         // Low Speed Vehicles
-        {
-            id: 'winner',
-            name: 'Winner',
-            category: 'low-speed',
-            price: '₹65,000',
-            image: new URL('../assets/0e8156ef0eda994e60ba2744c68fa19ab070cdc9.png', import.meta.url).href,
+    {
+      id: 'winner',
+      name: 'Winner',
+      category: 'low-speed',
+      price: '₹65,000',
+      image: new URL('../assets/winner/1.png', import.meta.url).href,
             specifications: {
                 voltage: '60-72 V',
                 motorType: 'BLDC Hub Motor',
@@ -253,12 +267,12 @@ export function BuyVehiclesPage({ onNavigate, user }) {
             },
             features: ['Premium build quality', 'Advanced BLDC technology', 'Auto cut-off charging']
         },
-        {
-            id: 'winner-pro',
-            name: 'Winner Pro',
-            category: 'low-speed',
-            price: '₹72,000',
-            image: new URL('../assets/0e8156ef0eda994e60ba2744c68fa19ab070cdc9.png', import.meta.url).href,
+    {
+      id: 'winner-pro',
+      name: 'Winner Pro',
+      category: 'low-speed',
+      price: '₹72,000',
+      image: new URL('../assets/winner/2.png', import.meta.url).href,
             specifications: {
                 voltage: '60-72 V',
                 motorType: 'BLDC Hub Motor',
@@ -437,26 +451,7 @@ export function BuyVehiclesPage({ onNavigate, user }) {
             },
             features: ['Graceful performance', 'High-speed capability', 'Advanced features']
         },
-        // Handicapped Vehicle
-    {
-      id: 'trike',
-      name: 'Trike',
-      category: 'handicapped',
-      price: '₹85,000',
-      // runtime png trike image
-      image: `/png/trike/trik.jpg`,
-            specifications: {
-                voltage: '48-60-72 V',
-                motorType: 'BLDC Hub Motor',
-                chargerType: 'Micro Charger with Auto Cut off',
-                frontBrake: 'Disc',
-                rearBrake: 'Drum',
-                headlight: 'LED',
-                wheelType: 'Alloy Wheel',
-                usbCharging: 'Available'
-            },
-            features: ['Three-wheeler design', 'Flexible voltage options', 'Accessible for all']
-        }
+    // Handicapped Vehicle
     ];
     const categories = [
         { id: 'all', name: 'All Vehicles', icon: Bike },

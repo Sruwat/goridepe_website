@@ -102,7 +102,7 @@ export function VehiclesPage({ onNavigate, user }) {
         // Simulate booking
         alert(`Ride request submitted for scooter ${scooterId}. You will be notified once approved.`);
     };
-    return (<div className="min-h-screen bg-gray-50">
+    return (<div className="min-h-screen pt-8 bg-gray-50">
       {/* Hero Banner */}
       <div className="relative h-64 flex items-center justify-center overflow-hidden rounded-b-xl">
         <ImageWithFallback src={new URL('../assets/0e8156ef0eda994e60ba2744c68fa19ab070cdc9.png', import.meta.url).href} alt="Fleet background" className="absolute inset-0 w-full h-full object-cover"/>

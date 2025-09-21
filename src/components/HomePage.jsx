@@ -60,7 +60,7 @@ export function HomePage({ onNavigate, user }) {
     ];
     return (<div className="pt-16">
       {/* Enhanced Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative pt-8 min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback src="https://images.unsplash.com/photo-1641205502134-07b24a41227d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpYyUyMHNjb290ZXIlMjBjaXR5JTIwbW9kZXJuJTIwY2xlYW58ZW58MXx8fHwxNzU3OTM2ODk3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" alt="Go Ride Pe - Clean electric scooter in modern city" className="w-full h-full object-cover"/>
           <div className="absolute inset-0 bg-gradient-to-r from-green-900/70 to-black/50"></div>

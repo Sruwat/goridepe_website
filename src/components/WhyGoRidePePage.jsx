@@ -77,7 +77,7 @@ export function WhyGoRidePePage({ onNavigate, user }) {
             rating: 5
         }
     ];
-    return (<div className="min-h-screen bg-gray-50">
+    return (<div className="min-h-screen pt-8 bg-gray-50">
       {/* Hero Banner */}
       <div className="relative h-80 bg-cover bg-center flex items-center justify-center" style={{
             backgroundImage: 'url(https://images.unsplash.com/photo-1747135749111-dff4450a00fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpYyUyMHZlaGljbGUlMjBmdXR1cmUlMjBzdXN0YWluYWJsZSUyMGdyZWVuJTIwdGVjaG5vbG9neXxlbnwxfHx8fDE3NTgwMTU5OTZ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral)'

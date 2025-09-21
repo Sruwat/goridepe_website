@@ -68,7 +68,7 @@ export function PricingPage({ onNavigate, user }) {
         // Navigate to payment process
         onNavigate('payment');
     };
-    return (<div className="min-h-screen bg-gray-50">
+    return (<div className="min-h-screen pt-8 bg-gray-50">
       {/* Hero Banner */}
       <div className="relative h-64 bg-cover bg-center flex items-center justify-center" style={{
             backgroundImage: 'url(https://images.unsplash.com/photo-1732056793564-b915bb47eedb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpYyUyMHNjb290ZXIlMjBjaXR5JTIwcm9hZHMlMjBiYW5uZXJ8ZW58MXx8fHwxNzU3NzUzMzYyfDA&ixlib=rb-4.1.0&q=80&w=1080)'
